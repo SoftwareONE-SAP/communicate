@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/Centiq/communicate/issues"
   },
-  "homepage": "https://github.com/Centiq/communicate#readme"
+  "homepage": "https://github.com/Centiq/communicate#readme",
+  "dependencies": {
+    "redis": "^2.3.0"
+  }
 }
