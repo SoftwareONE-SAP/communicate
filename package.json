@@ -1,0 +1,29 @@
+{
+  "name": "communicate",
+  "version": "1.0.0",
+  "description": "A library communicating between node processes with redis",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Centiq/communicate.git"
+  },
+  "keywords": [
+    "Cluster",
+    "Communicate",
+    "Communication",
+    "Message",
+    "Multiple",
+    "Processes",
+    "Redis",
+    "Module"
+  ],
+  "author": "William Overton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Centiq/communicate/issues"
+  },
+  "homepage": "https://github.com/Centiq/communicate#readme"
+}
