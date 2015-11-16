@@ -7,8 +7,6 @@ var CommunicateWorker = function(parent, clusterName) {
     this.parent = parent;
     this.clusterName = clusterName;
 
-    // debug(this);
-
     this.init();
 }
 
@@ -31,11 +29,11 @@ CommunicateWorker.prototype.init = function() {
 };
 
 CommunicateWorker.prototype.onMasterMessage = function(channel, message) {
-	this.emit("new-command", JSON.parse(message))
+    this.emit("new-command", JSON.parse(message))
 }
 
 CommunicateWorker.prototype.publish = function(command, data) {
-	this.parent.libs.redis.publish(this.returnChannel, JSON.stringify({
+    this.parent.libs.redis.publish(this.returnChannel, JSON.stringify({
         command: command,
         data: data
     }));
