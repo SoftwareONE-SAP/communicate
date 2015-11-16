@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/Centiq/communicate#readme",
   "dependencies": {
+    "chai": "^3.4.1",
     "redis": "^2.3.0"
   }
 }
