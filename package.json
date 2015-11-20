@@ -1,6 +1,6 @@
 {
   "name": "communicate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library communicating between node processes with redis",
   "main": "app.js",
   "scripts": {
