@@ -15,12 +15,15 @@ util.inherits(CommunicateMaster, EventEmitter);
 CommunicateMaster.prototype.init = function() {
     this.masterChannel = this.parent.options.redis.masterChannel ? this.parent.options.redis.masterChannel : "communicate-internal@@@master@@@" + this.clusterName;
     this.returnChannel = this.parent.options.redis.returnChannel ? this.parent.options.redis.returnChannel : "communicate-internal@@@return@@@" + this.clusterName;
+    this.errorChannel = this.parent.options.redis.errorChannel ? this.parent.options.redis.errorChannel : "communicate-internal@@@error@@@" + this.clusterName;
 
     var returnClient = this.parent.libs.redis.createClient();
-
     returnClient.subscribe(this.returnChannel);
-
     returnClient.on("message", this.onWorkerMessage.bind(this));
+
+    var errorClient = this.parent.libs.redis.createClient();
+    errorClient.subscribe(this.errorChannel);
+    errorClient.on("message", this.onWorkerError.bind(this));
 
     this.parent.emit("init", "Registered '" + this.masterChannel + "' as master redis channel And registered '" + this.returnChannel + "' as return redis channel");
 };
@@ -45,6 +48,10 @@ CommunicateMaster.prototype.addTask = function(channel, packet) {
 
 CommunicateMaster.prototype.clearTasks = function(channel) {
     this.parent.libs.redis.pubClient.del("communicate-internal@@@tasks@@@" + channel);
+}
+
+CommunicateMaster.prototype.onWorkerError = function(channel, message){
+    this.emit("worker-error", JSON.parse(message))
 }
 
 module.exports = CommunicateMaster;

@@ -7,6 +7,8 @@ var CommunicateWorker = function(parent, clusterName) {
     this.parent = parent;
     this.clusterName = clusterName;
 
+    // debug(this);
+
     this.init();
 }
 
@@ -15,6 +17,7 @@ util.inherits(CommunicateWorker, EventEmitter);
 CommunicateWorker.prototype.init = function() {
     this.masterChannel = this.parent.options.redis.masterChannel ? this.parent.options.redis.masterChannel : "communicate-internal@@@master@@@" + this.clusterName;
     this.returnChannel = this.parent.options.redis.returnChannel ? this.parent.options.redis.returnChannel : "communicate-internal@@@return@@@" + this.clusterName;
+    this.errorChannel = this.parent.options.redis.errorChannel ? this.parent.options.redis.errorChannel : "communicate-internal@@@error@@@" + this.clusterName;
 
     /**
      * Connect to redis
@@ -39,14 +42,22 @@ CommunicateWorker.prototype.publish = function(command, data) {
     }));
 }
 
-CommunicateWorker.prototype.bindTaskWorker = function(channel, workerFunction){
-    this.parent.libs.redis.pubClient.blpop("communicate-internal@@@tasks@@@" + channel, 0, function(err, data){
-        if(err){
+CommunicateWorker.prototype.bindTaskWorker = function(channel, workerFunction) {
+    this.parent.libs.redis.pubClient.blpop("communicate-internal@@@tasks@@@" + channel, 0, function(err, data) {
+        if (err) {
             debug(err);
             return;
         }
 
-        workerFunction(JSON.parse(data[1]), function(){
+        workerFunction(JSON.parse(data[1]), function(err, data) {
+
+            if (err) {
+                this.parent.libs.redis.publish(this.errorChannel, JSON.stringify({
+                    err: err,
+                    data: data
+                }));
+            }
+
             this.bindTaskWorker(channel, workerFunction)
         }.bind(this));
     }.bind(this));
