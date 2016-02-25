@@ -12,7 +12,7 @@ var RedisHandler = function(options){
 }
 
 RedisHandler.prototype.createClient = function() {
-	debug("Creating new client...");
+	// debug("Creating new client...");
 
 	var client = redis.createClient(this.options.port, this.options.host, {});
 
