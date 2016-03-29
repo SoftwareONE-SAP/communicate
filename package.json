@@ -1,7 +1,7 @@
 {
   "name": "communicate",
-  "version": "1.0.1",
-  "description": "A library communicating between node processes with redis",
+  "version": "1.0.2",
+  "description": "A library communicating between master->many node processes with redis",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
